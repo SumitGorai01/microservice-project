@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ConfigServer
+  cloud:
+    config:
+      server:
+        git:
+          uri : https://github.com/SumitGorai01/microservice-configuration.git
+          clone-on-start : true
+           
+    
+server:
+  port : 9097
+
+  
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9095/eureka
