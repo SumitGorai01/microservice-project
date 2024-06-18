@@ -123,7 +123,6 @@ INDEX VERSION 1.134+C:\eclipse\eclipse-workspace-microservice\.metadata\.plugins
 292802889.index
 4235307102.index
 1241330714.index
-2606907390.index
 2500727047.index
 312293603.index
 2204104876.index
