@@ -20,6 +20,7 @@ import com.project.user.service.entities.User;
 import com.project.user.service.services.UserService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
 @RequestMapping("/users")
@@ -37,13 +38,16 @@ public class UserController {
 		User user1 = userService.saveUser(user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(user1);
 	}
-	
+	int retryCount=1;
+
 	//get one user
 	@GetMapping("/{userId}")
-	@CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
+	//@CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")
+	@Retry(name = "ratingHotelService",fallbackMethod = "ratingHotelFallback")
 	public ResponseEntity<User> getOneUser(@PathVariable("userId") String userId){
 		logger.info("Get Single user Handler : UserController");
-
+		logger.info("Retry Count :{}",retryCount);
+		retryCount++;
 		User user = userService.getUser(userId);
 		return ResponseEntity.ok(user);
 	}
@@ -51,6 +55,7 @@ public class UserController {
 	//create circuit breaker for fallback
 	public ResponseEntity<User> ratingHotelFallback(String userId,Exception ex){
 		logger.info("fallback is executed because Service is down : "+ex.getMessage());
+		
 		User user = User.builder()
 					.email("dummy@gmail.com")
 					.name("dummy")
